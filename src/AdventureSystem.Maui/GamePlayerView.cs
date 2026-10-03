@@ -464,6 +464,19 @@ public sealed class GamePlayerView : ContentView
 
     public void FocusInput() => input.Focus();
 
+    /// <summary>Types a command into the input box a letter at a time, then sends it (store preview videos).</summary>
+    public async Task TypeAndSubmitAsync(string command, int millisecondsPerLetter = 90)
+    {
+        for (int i = 1; i <= command.Length; i++)
+        {
+            input.Text = command[..i];
+            input.CursorPosition = i;
+            await Task.Delay(millisecondsPerLetter);
+        }
+        await Task.Delay(350);
+        await SubmitAsync();
+    }
+
     /// <summary>
     /// The command box only takes focus by itself on the desktop: on a phone or tablet the on-screen keyboard would
     /// come up over the game (tap the box to type).

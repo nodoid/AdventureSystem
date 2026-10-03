@@ -78,9 +78,26 @@ public sealed class PlayerPage : ContentPage
 		}
 #if DEBUG
 		// Development aid for store screenshots: AC_PLAYER_DEMO=lighthouse[;command;command…] plays the example,
-		// and AC_PLAYER_DEMO=choose stays on the game chooser as a store release shows it.
+		// AC_PLAYER_DEMO=choose stays on the game chooser as a store release shows it, and
+		// AC_PLAYER_DEMO=video[;command;command…] is a store preview video: the chooser, then The Lighthouse with each
+		// command typed out.
 		else if (Environment.GetEnvironmentVariable("AC_PLAYER_DEMO") is "choose")
 			genesisButton.IsVisible = false;
+		else if (Environment.GetEnvironmentVariable("AC_PLAYER_DEMO") is { } video && video.StartsWith("video", StringComparison.Ordinal))
+		{
+			genesisButton.IsVisible = false;
+			player.AutosaveEnabled = false;
+			await Task.Delay(int.TryParse(Environment.GetEnvironmentVariable("AC_PLAYER_DEMO_WAIT"), out var wait) ? wait : 3000);
+			var example = ExampleAdventures.Lighthouse();
+			example.Settings.PagedOutput = false;
+			Play(example);
+			await Task.Delay(5000);   // the title screen
+			foreach (var command in video.Split(';', StringSplitOptions.TrimEntries).Skip(1).Where(c => c.Length > 0))
+			{
+				await player.TypeAndSubmitAsync(command);
+				await Task.Delay(2200);
+			}
+		}
 		else if (Environment.GetEnvironmentVariable("AC_PLAYER_DEMO") is { Length: > 0 } demo)
 		{
 			var parts = demo.Split(';', StringSplitOptions.TrimEntries);
