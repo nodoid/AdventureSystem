@@ -57,7 +57,11 @@ public class SoundLibraryTests
     public void ExampleGamesUseEmbeddedLibrarySounds()
     {
         var folder = LibraryFolder();
+#if DEBUG
         foreach (var game in new[] { ExampleAdventures.Lighthouse(), ExampleAdventures.Genesis() })
+#else
+        foreach (var game in new[] { ExampleAdventures.Lighthouse() })
+#endif
             foreach (var sound in game.Sounds)
             {
                 var bytes = game.Assets[sound.AssetName];

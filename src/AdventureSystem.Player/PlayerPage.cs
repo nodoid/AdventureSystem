@@ -36,7 +36,9 @@ public sealed class PlayerPage : ContentPage
 		open.Clicked += async (_, _) => await OpenGameAsync();
 		// The Doctor Who fan adventure is for development builds only, never store releases.
 		genesisButton = new Button { Text = "Play “Genesis” (example)", IsVisible = IsDevelopmentBuild };
+#if DEBUG
 		genesisButton.Clicked += (_, _) => Play(ExampleAdventures.Genesis());
+#endif
 		var example2 = new Button { Text = "Play “The Lighthouse” (example)" };
 		example2.Clicked += (_, _) => Play(ExampleAdventures.Lighthouse());
 		chooser = new VerticalStackLayout

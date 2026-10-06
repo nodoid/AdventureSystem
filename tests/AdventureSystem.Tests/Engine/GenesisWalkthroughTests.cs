@@ -1,3 +1,4 @@
+#if DEBUG // Genesis is not compiled into Release builds.
 using AdventureSystem.Core.Engine;
 using AdventureSystem.Core.Model;
 using AdventureSystem.Core.Packaging;
@@ -205,3 +206,4 @@ public class GenesisWalkthroughTests
         Assert.False(e.State.EventCounts.ContainsKey("gev_arrest"));
     }
 }
+#endif

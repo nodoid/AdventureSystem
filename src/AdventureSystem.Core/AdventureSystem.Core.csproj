@@ -11,4 +11,8 @@
     <EmbeddedResource Include="..\..\assets\sounds\waves.wav;..\..\assets\sounds\foghorn.wav;..\..\assets\sounds\creak.wav;..\..\assets\sounds\fanfare.wav;..\..\assets\sounds\wind.wav;..\..\assets\sounds\engine_hum.wav;..\..\assets\sounds\alarm.wav;..\..\assets\sounds\explosion_deep.wav;..\..\assets\sounds\force_field.wav"
                       LogicalName="sounds.%(Filename)%(Extension)" />
   </ItemGroup>
+  <ItemGroup Condition="'$(Configuration)' == 'Release'">
+    <!-- Genesis is a Doctor Who fan game (BBC characters): development and tests only, never in store builds. -->
+    <Compile Remove="Samples\GenesisAdventure.cs" />
+  </ItemGroup>
 </Project>
