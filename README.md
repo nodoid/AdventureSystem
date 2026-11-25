@@ -4,7 +4,7 @@ Version 1.0 · Copyright © 2026 Paul F.Johnson · Released under the [DILLIGAF 
 
 A .NET 10 / .NET MAUI system for writing, importing and publishing text and graphic adventure games.
 
-* **Adventure System Studio**: the editor, for **macOS**, **Windows** and **iPad**. It has a desktop-style menu bar, keyboard shortcuts and a sidebar, list and detail layout.
+* **Adventure System Studio**: the editor, for **macOS**, **Windows**, **iPad** and **Android tablets**. It has a desktop-style menu bar, keyboard shortcuts and a sidebar, list and detail layout.
 * **Adventure Player**: plays games on **Android**, **iPhone/iPad**, **macOS** and **Windows**. Exported games are copies of the Player with the game built in.
 * **Console player**: a single-file terminal executable that runs any game, or a game appended to it.
 
@@ -27,7 +27,7 @@ The same guide is available in the Studio under **Help › User Guide…** (⇧�
 | `src/AdventureSystem.Core` | Game model, parser, engine, picture renderer, packaging, exporters and example games. No UI dependencies. |
 | `src/AdventureSystem.Importers` | Importers for PAWS, The Quill (+ Illustrator) and Graphic Adventure Creator. |
 | `src/AdventureSystem.Maui` | Shared MAUI UI: `GamePlayerView`, audio (Plugin.Maui.Audio), picture display, light theme. |
-| `src/AdventureSystem.Studio` | The Studio app (Mac Catalyst, Windows, iPadOS). |
+| `src/AdventureSystem.Studio` | The Studio app (Mac Catalyst, Windows, iPadOS, Android). |
 | `src/AdventureSystem.Player` | The Player app (Android, iOS, Mac Catalyst, Windows). It embeds a game when built with `-p:EmbeddedGame=…`. |
 | `src/AdventureSystem.ConsolePlayer` | `adventure-player`, the console player and debugging tool. |
 | `tests/AdventureSystem.Tests` | xUnit tests: parser, engine, walkthroughs, graphics, packaging and all three importers. |
@@ -128,6 +128,7 @@ To create the templates for options 3 and 4, run `build/build-templates.sh` (mac
 ```bash
 dotnet test tests/AdventureSystem.Tests                                  # 166 tests
 dotnet build src/AdventureSystem.Studio -f net10.0-maccatalyst           # Studio for macOS
+dotnet build src/AdventureSystem.Studio -f net10.0-android               # Studio for Android tablets
 dotnet build src/AdventureSystem.Player -f net10.0-android               # Player APK
 dotnet run --project src/AdventureSystem.ConsolePlayer -- --example      # play Genesis in the terminal
 dotnet run --project src/AdventureSystem.ConsolePlayer -- --parse example "quietly open the door"

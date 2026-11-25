@@ -1,8 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<!-- The Studio (creator) runs on iPad, macOS (Mac Catalyst) and Windows. Phones use the Player only. -->
-		<TargetFrameworks Condition="!$([MSBuild]::IsOSPlatform('linux'))">net10.0-maccatalyst;net10.0-ios</TargetFrameworks>
+		<!-- The Studio (creator) runs on iPad, Android tablets, macOS (Mac Catalyst) and Windows. Phones use the Player only. -->
+		<TargetFrameworks>net10.0-android</TargetFrameworks>
+		<TargetFrameworks Condition="!$([MSBuild]::IsOSPlatform('linux'))">$(TargetFrameworks);net10.0-maccatalyst;net10.0-ios</TargetFrameworks>
 		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net10.0-windows10.0.19041.0</TargetFrameworks>
 
 		<!-- For example: <RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers> -->

@@ -18,8 +18,8 @@ public partial class App : Application
 		// Windows shows MenuBarItems only inside a NavigationPage (in its bar), so host the page in one there.
 		if (DeviceInfo.Platform == DevicePlatform.WinUI)
 			page = new NavigationPage(page) { BarBackgroundColor = AdventureSystem.Maui.Theme.Sidebar, BarTextColor = AdventureSystem.Maui.Theme.Text };
-		// The iPad: commands live in the navigation bar.
-		if (DeviceInfo.Platform == DevicePlatform.iOS)
+		// The iPad and Android tablets: commands live in the navigation bar / action bar.
+		if (DeviceInfo.Platform == DevicePlatform.iOS || DeviceInfo.Platform == DevicePlatform.Android)
 			page = new NavigationPage(page) { BarBackgroundColor = AdventureSystem.Maui.Theme.Window, BarTextColor = AdventureSystem.Maui.Theme.Text };
 		var window = new Window(page)
 		{

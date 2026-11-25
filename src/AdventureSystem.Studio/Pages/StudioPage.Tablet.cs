@@ -393,6 +393,97 @@ public sealed partial class StudioPage
         };
         if (section == Section.TestPlay) right.Add(Button("sidebar.right", "Show or hide the Watch panel", ToggleWatch));
         item.RightBarButtonItems = right.ToArray();
+#elif ANDROID
+        UpdateAndroidBar();
 #endif
     }
+
+#if ANDROID
+    // ------------------------------------------------------------------ Android action bar
+
+    /// <summary>
+    /// Android has no menu bar, so the same commands sit in the action bar: Test Play, Add, Share and More
+    /// (the Watch panel on Test Play). Back is the system's, and goes to the previous pane first.
+    /// </summary>
+    private void UpdateAndroidBar()
+    {
+        ToolbarItems.Clear();
+        static ToolbarItem Item(string text, int priority, EventHandler clicked)
+        {
+            var item = new ToolbarItem { Text = text, Order = ToolbarItemOrder.Primary, Priority = priority };
+            item.Clicked += clicked;
+            return item;
+        }
+        if (section == Section.TestPlay) ToolbarItems.Add(Item("Watch", 0, (_, _) => ToggleWatch()));
+        ToolbarItems.Add(Item("Play", 10, (_, _) => { ShowSection(Section.TestPlay); ItemPicked(); }));
+        ToolbarItems.Add(Item("Add", 20, async (_, _) => await ShowAndroidAddAsync()));
+        ToolbarItems.Add(Item("Share", 30, async (_, _) => await ShowAndroidShareAsync()));
+        ToolbarItems.Add(Item("More", 40, async (_, _) => await ShowAndroidMoreAsync()));
+    }
+
+    private async Task ShowAndroidAddAsync()
+    {
+        var choice = await DisplayActionSheetAsync("Add", "Cancel", null,
+            "Room", "Item or Person", "Trigger", "Puzzle", "Random Event", "Variable", "Command", "Picture", "Sound…");
+        switch (choice)
+        {
+            case "Room": AddNewIn(Section.Rooms); break;
+            case "Item or Person": AddNewIn(Section.Items); break;
+            case "Trigger": AddNewIn(Section.Triggers); break;
+            case "Puzzle": AddNewIn(Section.Puzzles); break;
+            case "Random Event": AddNewIn(Section.Events); break;
+            case "Variable": AddNewIn(Section.Variables); break;
+            case "Command": AddNewIn(Section.Commands); break;
+            case "Picture": AddNewIn(Section.Pictures); break;
+            case "Sound…": AddNewIn(Section.Sounds); break;
+        }
+    }
+
+    private async Task ShowAndroidShareAsync()
+    {
+        var choice = await DisplayActionSheetAsync(document.Adventure.Title, "Cancel", null,
+            "Export Game File…", "Export Standalone Game…", "Send a Copy…");
+        switch (choice)
+        {
+            case "Export Game File…": await GameFileExport.ChooseAndExportAsync(this, document.Adventure); break;
+            case "Export Standalone Game…": await ExportAsync(); break;
+            case "Send a Copy…": await SendCopyAsync(); break;
+        }
+    }
+
+    private async Task ShowAndroidMoreAsync()
+    {
+        var choices = new List<string> { "Import Game…", "Validate" };
+        if (selected != null) choices.AddRange(new[] { "Duplicate", "Delete…" });
+        choices.AddRange(new[]
+        {
+            "User Guide…", "Parser & Command Reference", "Triggers, Conditions & Actions",
+            "Sound Library Credits", "About Adventure System Studio",
+        });
+        var choice = await DisplayActionSheetAsync("More", "Cancel", null, choices.ToArray());
+        switch (choice)
+        {
+            case "Import Game…": await ImportLegacyAsync(); break;
+            case "Validate": await ValidateAsync(); break;
+            case "Duplicate": Duplicate(); break;
+            case "Delete…": await DeleteSelectedAsync(); break;
+            case "User Guide…": await ShowUserGuideAsync(); break;
+            case "Parser & Command Reference": await Navigation.PushModalAsync(new ReportPage("Parser & command reference", HelpText.ParserReference(document.Adventure))); break;
+            case "Triggers, Conditions & Actions": await Navigation.PushModalAsync(new ReportPage("Triggers, conditions & actions", HelpText.TriggerReference())); break;
+            case "Sound Library Credits": await ShowSoundCreditsAsync(); break;
+            case "About Adventure System Studio": await ShowAboutAsync(); break;
+        }
+    }
+
+    /// <summary>Android's Back returns to the list, then the sidebar, before it leaves the Studio.</summary>
+    protected override bool OnBackButtonPressed()
+    {
+        if (compact && pane != Pane.Sidebar)
+        {
+            GoBack();
+            return true;
+        }
+        return base.OnBackButtonPressed();
+    }
+#endif
 }

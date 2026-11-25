@@ -4,7 +4,7 @@
 
 | Program | Platforms | Use it to |
 |---|---|---|
-| **Adventure System Studio** | macOS, Windows, iPad | Write, import, test and export games |
+| **Adventure System Studio** | macOS, Windows, iPad, Android tablets | Write, import, test and export games |
 | **Adventure Player** | Android, iPhone, iPad, macOS, Windows | Play games; exported games are copies of the Player with one game built in |
 | **adventure-player** (console) | macOS, Windows, Linux | Play games in a terminal; debug the parser; export tiny standalone text games |
 
@@ -15,6 +15,7 @@ You need the .NET 10 SDK with the MAUI workload (`dotnet workload install maui`)
 ```bash
 dotnet test tests/AdventureSystem.Tests                                 # run the test suite
 dotnet build src/AdventureSystem.Studio -f net10.0-maccatalyst          # Studio for macOS
+dotnet build src/AdventureSystem.Studio -f net10.0-android              # Studio for Android tablets (.apk)
 dotnet build src/AdventureSystem.Studio -f net10.0-windows10.0.19041.0  # Studio for Windows (on Windows)
 dotnet build src/AdventureSystem.Player -f net10.0-android              # Player for Android (.apk)
 dotnet build src/AdventureSystem.Player -f net10.0-ios                  # Player for iPhone/iPad
